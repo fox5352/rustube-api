@@ -46,7 +46,7 @@ pub mod video_downloader {
             };
 
             println!("Downloading {}...", self.title);
-            stream.download_to(format!("{}",self.title)).await?;
+            stream.download_to(format!("{}.mp4",self.title)).await?;
 
             return Ok(())
         }
@@ -63,7 +63,7 @@ pub mod video_downloader {
                 }
             };
 
-            stream.download_to(format!("{}",self.title)).await?;
+            stream.download_to(format!("{}.mp4",self.title)).await?;
 
             return Ok(())
         }
@@ -81,7 +81,7 @@ pub mod video_downloader {
             };
         
             
-            stream.download_to(format!("{}",self.title)).await?;
+            stream.download_to(format!("{}.webm",self.title)).await?;
 
             return Ok(())
         }
