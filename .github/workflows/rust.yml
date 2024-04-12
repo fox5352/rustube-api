@@ -23,19 +23,19 @@ jobs:
       run: mkdir -p release
 
     - name: Build
-      if: '!contains(github.event.head_commit.message, "updated workflow") && !contains(github.event.head_commit.message, "Github Bot")'
+      if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       run: cargo build --verbose --release --bin rustube-api
 
     - name: Move Build Output (Ubuntu)
-      if: matrix.platform == 'ubuntu-latest' && '!contains(github.event.head_commit.message, "updated workflow") && !contains(github.event.head_commit.message, "Github Bot")'
+      if: matrix.platform == 'ubuntu-latest' &&  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       run: cp target/release/rustube-api release/rustube-api-ubuntu
       
     - name: Move Build Output (Windows)
-      if: matrix.platform == 'windows-latest'&& '!contains(github.event.head_commit.message, "updated workflow") && !contains(github.event.head_commit.message, "Github Bot")'
+      if: matrix.platform == 'windows-latest'&&  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       run: cp target/release/rustube-api.exe release/rustube-api-windows.exe
       
     - name: Upload Artifact
-      if: '!contains(github.event.head_commit.message, "updated workflow") && !contains(github.event.head_commit.message, "Github Bot")'
+      if:  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       uses: actions/upload-artifact@v2
       with:
         name: release-${{ matrix.platform }}
