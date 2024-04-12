@@ -46,6 +46,6 @@ jobs:
       run: |
         git config --global user.name 'Bobby the Bot'
         git config --global user.email 'christophervos522@gmail.com'
-        git add release/
+        git add release
         git commit -m "Github Bot"
-        git push origin main
+        git push origin master
