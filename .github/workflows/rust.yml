@@ -61,5 +61,5 @@ jobs:
       run: |
         git checkout master
         git add release
-        git commit -m "Add release artifact"
+        git commit -m "GitHub Actions"
         git push origin master
