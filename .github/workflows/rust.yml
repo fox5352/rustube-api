@@ -22,18 +22,18 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Build
-      run: cargo build --verbose --release
+      run: cargo build --verbose --release --bin rustube-api
       
     - name: Create Release Directory
       run: mkdir release
       
     - name: Move Build Output (Ubuntu)
       if: matrix.platform == 'ubuntu-latest'
-      run: mv target/release/${{ github.event.repository.name }} release/${{ github.event.repository.name }}-ubuntu
+      run: mv target/release/rustube-api release/rustube-api-ubuntu
       
     - name: Move Build Output (Windows)
       if: matrix.platform == 'windows-latest'
-      run: mv target/release/${{ github.event.repository.name }}.exe release/${{ github.event.repository.name }}-windows.exe
+      run: mv target/release/rustube-api.exe release/rustube-api-windows.exe
       
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
