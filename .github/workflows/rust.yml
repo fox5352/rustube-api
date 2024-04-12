@@ -10,7 +10,6 @@ env:
 jobs:
 
   build:
-    if: ${{ steps.check.outputs.skip != 'true' }}
     strategy:
       matrix:
         platform: [ubuntu-latest, windows-latest]
@@ -28,34 +27,41 @@ jobs:
           echo "::set-output name=skip::false"
         fi
 
-    - uses: actions/checkout@v3
+    - name: Build
+      if: ${{ steps.check.outputs.skip != 'true' }}
+      uses: actions/checkout@v3
 
     - name: Build
+      if: ${{ steps.check.outputs.skip != 'true' }}
       run: cargo build --verbose --release --bin rustube-api
-      
+
     - name: Create Release Directory
+      if: ${{ steps.check.outputs.skip != 'true' }}
       run: mkdir release
-      
+
     - name: Move Build Output (Ubuntu)
-      if: matrix.platform == 'ubuntu-latest'
+      if: ${{ steps.check.outputs.skip != 'true' && matrix.platform == 'ubuntu-latest' }}
       run: mv target/release/rustube-api release/rustube-api-ubuntu
-      
+
     - name: Move Build Output (Windows)
-      if: matrix.platform == 'windows-latest'
+      if: ${{ steps.check.outputs.skip != 'true' && matrix.platform == 'windows-latest' }}
       run: mv target/release/rustube-api.exe release/rustube-api-windows.exe
-      
+
     - name: Upload Artifact
+      if: ${{ steps.check.outputs.skip != 'true' }}
       uses: actions/upload-artifact@v3
       with:
         name: release-${{ matrix.platform }}
         path: release
-        
+
     - name: Configure Git
+      if: ${{ steps.check.outputs.skip != 'true' }}
       run: |
         git config --global user.email "christophervos522@gmail.com"
         git config --global user.name "Chris"
-        
+
     - name: Commit Release Folder
+      if: ${{ steps.check.outputs.skip != 'true' }}
       run: |
         git checkout master
         git add release
