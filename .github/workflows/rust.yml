@@ -21,7 +21,7 @@ jobs:
   
     - name: Create Release Directory
       run: |
-        if [ "$RUNNER_OS" == "Windows" ]; then
+        if [ "${{ runner.os }}" == "Windows" ]; then
           mkdir release 2> $null
         else
           mkdir -p release
