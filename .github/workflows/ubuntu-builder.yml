@@ -10,41 +10,25 @@ env:
 jobs:
 
   build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, windows-latest]
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-  
-    - name: remove release folder
-      if: matrix.platform == 'ubuntu-latest'
-      run: rm -r release
 
     - name: Create Release Directory
-      if: matrix.platform == 'ubuntu-latest'
-      run: mkdir -p release
+      run: rm release/rustube-api-ubuntu
 
     - name: Build
       if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       run: cargo build --release --bin rustube-api
     
     - name: Move Build Output (Ubuntu)
-      if: matrix.platform == 'ubuntu-latest' &&  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       run: cp target/release/rustube-api release/rustube-api-ubuntu
       
-    - name: Move Build Output (Windows)
-      if: matrix.platform == 'windows-latest'&&  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
-      run: cp target/release/rustube-api.exe release/rustube-api.exe
-      
-    - name: Upload Artifact
-      if:  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
-      uses: actions/upload-artifact@v2
-      with:
-        name: release-${{ matrix.platform }}
-        path: release
+    # - name: Move Build Output (Windows)
+    #   if: matrix.platform == 'windows-latest'&&  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != # 'Github Bot'
+    #   run: cp target/release/rustube-api.exe release/rustube-api.exe
       
     - name: Set Git Config
       if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
@@ -59,6 +43,7 @@ jobs:
       env:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
+        git pull origin master
         git add release
         git commit -m "Github Bot"
         git push https://$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master

@@ -1,0 +1,45 @@
+name: RustBot
+
+on:
+  push:
+    branches: [ "master" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Create Release Directory
+      run: rm release/rustube-api-ubuntu.exe
+
+    - name: Build
+      if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      run: cargo build --release --bin rustube-api.exe
+      
+    - name: Move Build Output (Windows)
+      if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      run: cp target/release/rustube-api.exe release/rustube-api.exe
+      
+    - name: Set Git Config
+      if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        git config user.email "christophervos522@gmail.com"
+        git config user.name "christopher"
+        
+    - name: "Commit and push release folder"
+      if: true && github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        git pull origin master
+        git add release
+        git commit -m "Github Bot"
+        git push https://$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
