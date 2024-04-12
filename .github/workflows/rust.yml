@@ -46,8 +46,8 @@ jobs:
       env:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
-        git config --global user.name 'Bobby the Bot'
-        git config --global user.email 'christophervos522@gmail.com'
+        git config user.name 'Bobby the Bot'
+        git config user.email 'christophervos522@gmail.com'
         git add release
         git commit -m "Github Bot"
-        git push origin master
+        git push https://$PAT_TOKEN@github.com/$GITHUB_REPOSITORY.git HEAD:master
