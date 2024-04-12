@@ -19,14 +19,17 @@ jobs:
     steps:
     - uses: actions/checkout@v2
   
+    - name: remove release folder
+      run: rm -r release
+
     - name: Create Release Directory
       if: matrix.platform == 'ubuntu-latest'
       run: mkdir -p release
 
     - name: Build
       if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
-      run: cargo build --release --bin rustube-api}
-
+      run: cargo build --release --bin rustube-api
+    
     - name: Move Build Output (Ubuntu)
       if: matrix.platform == 'ubuntu-latest' &&  github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       run: cp target/release/rustube-api release/rustube-api-ubuntu
