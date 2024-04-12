@@ -43,6 +43,8 @@ jobs:
 
     - name: "Commit and push release folder"
       if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
         git config --global user.name 'Bobby the Bot'
         git config --global user.email 'christophervos522@gmail.com'
