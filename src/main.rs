@@ -1,4 +1,5 @@
 use std::{env, io::{stdin, stdout, Write}, process::exit};
+
 // local
 use rustube_api::video_downloader::Video;
 
