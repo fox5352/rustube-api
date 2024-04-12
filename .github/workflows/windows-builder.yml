@@ -10,7 +10,7 @@ env:
 jobs:
 
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -39,6 +39,6 @@ jobs:
       env:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
-        git add release
+        git add ./
         git commit -m "Github Bot"
         git push https://$PAT_TOKEN@github.com/${{ github.repository }} HEAD:master
