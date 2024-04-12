@@ -41,13 +41,22 @@ jobs:
         name: release-${{ matrix.platform }}
         path: release
 
+    - name: Debug Token
+      run: echo ${{ secrets.PAT_TOKEN }}
+      
+    - name: Set Git Config
+      if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
+      env:
+        PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+      run: |
+        git config user.email "christophervos522@gmail.com"
+        git config user.name "christopher"
+
     - name: "Commit and push release folder"
       if: github.event.head_commit.message != 'Update rust.yml' && github.event.head_commit.message != 'Github Bot'
       env:
         PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       run: |
-        git config --global user.email "christophervos522@gmail.com"
-        git config --global user.name "fox532"
         git add release
         git commit -m "Github Bot"
         git push https://$PAT_TOKEN@github.com/$GITHUB_REPOSITORY.git HEAD:master
